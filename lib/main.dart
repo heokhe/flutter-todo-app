@@ -9,14 +9,22 @@ void main() {
 class TodoItem extends StatelessWidget {
   final Todo todo;
   final void Function() onToggle;
-  final Key? key;
+  final void Function() onDelete;
+  final Key key;
 
-  TodoItem({required this.todo, required this.onToggle, this.key});
+  TodoItem(
+      {required this.todo,
+      required this.onToggle,
+      required this.onDelete,
+      required this.key});
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
+    return Dismissible(
         key: key,
+      direction: DismissDirection.horizontal,
+      onDismissed: (_) => onDelete(),
+      child: CheckboxListTile(
         controlAffinity: ListTileControlAffinity.leading,
         activeColor: Theme.of(context).accentColor,
         value: todo.isFinished,
@@ -24,7 +32,8 @@ class TodoItem extends StatelessWidget {
             style: todo.isFinished
                 ? TextStyle(decoration: TextDecoration.lineThrough)
                 : null),
-        onChanged: (bool? _) => onToggle());
+          onChanged: (bool? _) => onToggle()),
+    );
   }
 }
 
@@ -50,6 +59,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _addTodo(String title) => setState(() => _todos.add(Todo(title)));
+
+  void _deleteTodo(int index) {
+    setState(() {
+      if (_todos[index].isFinished) _finishedCount--;
+      _todos.removeAt(index);
+    });
+  }
 
   void _deleteFinishedTodos() {
     setState(() {
@@ -83,6 +99,7 @@ class _MyAppState extends State<MyApp> {
                   TodoItem(
                       todo: _todos[i],
                       onToggle: () => _toggleTodo(i),
+                      onDelete: () => _deleteTodo(i),
                       key: Key(_todos[i].title)),
                 _todos.length == 0
                     ? Padding(
