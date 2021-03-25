@@ -10,18 +10,14 @@ class TodoItem extends StatelessWidget {
   final Todo todo;
   final void Function() onToggle;
   final void Function() onDelete;
-  final Key key;
 
   TodoItem(
-      {required this.todo,
-      required this.onToggle,
-      required this.onDelete,
-      required this.key});
+      {required this.todo, required this.onToggle, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: key,
+      key: Key(todo.id),
       direction: DismissDirection.horizontal,
       onDismissed: (_) => onDelete(),
       child: CheckboxListTile(
@@ -96,10 +92,10 @@ class _MyAppState extends State<MyApp> {
                 Divider(),
                 for (int i = 0; i < _todos.length; i++)
                   TodoItem(
-                      todo: _todos[i],
-                      onToggle: () => _toggleTodo(i),
-                      onDelete: () => _deleteTodo(i),
-                      key: Key(_todos[i].title)),
+                    todo: _todos[i],
+                    onToggle: () => _toggleTodo(i),
+                    onDelete: () => _deleteTodo(i),
+                  ),
                 _todos.length == 0
                     ? Padding(
                         padding: EdgeInsets.fromLTRB(32, 72, 32, 0),
