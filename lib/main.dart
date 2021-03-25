@@ -21,17 +21,17 @@ class TodoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-        key: key,
+      key: key,
       direction: DismissDirection.horizontal,
       onDismissed: (_) => onDelete(),
       child: CheckboxListTile(
-        controlAffinity: ListTileControlAffinity.leading,
-        activeColor: Theme.of(context).accentColor,
-        value: todo.isFinished,
-        title: Text(todo.title,
-            style: todo.isFinished
-                ? TextStyle(decoration: TextDecoration.lineThrough)
-                : null),
+          controlAffinity: ListTileControlAffinity.leading,
+          activeColor: Theme.of(context).accentColor,
+          value: todo.isFinished,
+          title: Text(todo.title,
+              style: todo.isFinished
+                  ? TextStyle(decoration: TextDecoration.lineThrough)
+                  : null),
           onChanged: (bool? _) => onToggle()),
     );
   }
@@ -48,9 +48,8 @@ class _MyAppState extends State<MyApp> {
 
   void _toggleTodo(int index) {
     setState(() {
-      var todo = _todos[index];
-      todo.toggle();
-      if (todo.isFinished) {
+      _todos[index].toggle();
+      if (_todos[index].isFinished) {
         _finishedCount++;
       } else {
         _finishedCount--;
