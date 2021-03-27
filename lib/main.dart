@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starter_web/todo.dart';
-import 'package:flutter_starter_web/form.dart';
+import 'package:todo_app/todo.dart';
+import 'package:todo_app/form.dart';
 
 void main() {
   runApp(MyApp());

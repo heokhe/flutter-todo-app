@@ -1,4 +1,4 @@
-package com.example.flutter_starter_web
+package com.example.todo_app
 
 import io.flutter.embedding.android.FlutterActivity
 
