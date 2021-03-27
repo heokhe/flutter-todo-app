@@ -76,6 +76,10 @@ class _MyAppState extends State<MyApp> {
         color: Colors.deepPurple,
         theme: ThemeData(
             primarySwatch: Colors.deepPurple, accentColor: Colors.teal),
+        darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            primarySwatch: Colors.deepPurple,
+            accentColor: Colors.tealAccent),
         home: Scaffold(
             appBar: AppBar(
               title: Text('Todo App'),
