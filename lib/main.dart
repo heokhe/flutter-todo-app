@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Todo App',
+        title: 'Flutter Todo App',
         color: Colors.deepPurple,
         theme: ThemeData(
             primarySwatch: Colors.deepPurple, accentColor: Colors.teal),
@@ -80,7 +80,7 @@ class _MyAppState extends State<MyApp> {
             accentColor: Colors.tealAccent),
         home: Scaffold(
             appBar: AppBar(
-              title: Text('Todo App'),
+              title: Text('Flutter Todo App'),
               actions: [
                 IconButton(
                     tooltip: 'Delete finished todos',
@@ -88,31 +88,26 @@ class _MyAppState extends State<MyApp> {
                     onPressed: _finishedCount > 0 ? _deleteFinishedTodos : null)
               ],
             ),
-            body: ListView(
-              children: [
-                TodoForm(onSubmit: _addTodo),
-                Divider(),
-                for (int i = 0; i < _todos.length; i++)
-                  TodoItem(
-                    todo: _todos[i],
-                    onToggle: () => _toggleTodo(i),
-                    onDelete: () => _deleteTodo(i),
-                  ),
-                _todos.length == 0
-                    ? Padding(
-                        padding: EdgeInsets.fromLTRB(32, 72, 32, 0),
-                        child: Text(
-                          'Looks like you have nothing to do.',
-                          style: Theme.of(context).textTheme.headline5,
-                          softWrap: true,
-                          textAlign: TextAlign.center,
-                        ))
-                    : Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Text(
-                            '$_finishedCount finished, ${_todos.length - _finishedCount} remaining',
-                            style: Theme.of(context).textTheme.caption))
-              ],
-            )));
+            body: Center(
+                child: Container(
+                    constraints: BoxConstraints(maxWidth: 560),
+                    child: Card(
+                        margin: EdgeInsets.zero,
+                        clipBehavior: Clip.hardEdge,
+                        shape: RoundedRectangleBorder(),
+                        child: ListView(primary: true, children: [
+                          for (int i = 0; i < _todos.length; i++)
+                            TodoItem(
+                              todo: _todos[i],
+                              onToggle: () => _toggleTodo(i),
+                              onDelete: () => _deleteTodo(i),
+                            ),
+                          TodoForm(onSubmit: _addTodo),
+                          Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Text(
+                                  '$_finishedCount finished, ${_todos.length - _finishedCount} remaining',
+                                  style: Theme.of(context).textTheme.caption))
+                        ]))))));
   }
 }

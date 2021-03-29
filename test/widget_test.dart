@@ -9,10 +9,9 @@ void main() {
     await tester.pumpWidget(MyApp());
 
     // Add a todo
-    await tester.enterText(find.bySemanticsLabel('New todo'), 'Learn Flutter');
+    await tester.enterText(find.byType(TextField), 'Learn Flutter');
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pump();
-    expect(find.text('Looks like you have nothing to do.'), findsNothing);
     expect(find.text('0 finished, 1 remaining'), findsOneWidget);
     // Finish the todo
     await tester.tap(find.text('Learn Flutter'));
@@ -21,6 +20,7 @@ void main() {
     // Delete the finished todos
     await tester.tap(find.byTooltip('Delete finished todos'));
     await tester.pump();
-    expect(find.text('Looks like you have nothing to do.'), findsOneWidget);
+    expect(find.text('Learn Flutter'), findsNothing);
+    expect(find.text('0 finished, 0 remaining'), findsOneWidget);
   });
 }
