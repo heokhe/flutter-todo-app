@@ -23,11 +23,9 @@ class TodoItem extends StatelessWidget {
       child: CheckboxListTile(
           controlAffinity: ListTileControlAffinity.leading,
           activeColor: Theme.of(context).accentColor,
+          checkColor: Theme.of(context).accentIconTheme.color,
           value: todo.isFinished,
-          title: Text(todo.title,
-              style: todo.isFinished
-                  ? TextStyle(decoration: TextDecoration.lineThrough)
-                  : null),
+          title: Text(todo.title),
           onChanged: (bool? _) => onToggle()),
     );
   }
