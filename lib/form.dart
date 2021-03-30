@@ -22,7 +22,7 @@ class TodoForm extends StatelessWidget {
           }
         },
         decoration: InputDecoration.collapsed(
-            hintText: 'Add a new todo, e.g. go to shopping',
+            hintText: 'Add a new todo, e.g. go shopping...',
             border: InputBorder.none),
       ),
     );
