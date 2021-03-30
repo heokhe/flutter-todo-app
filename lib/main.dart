@@ -96,13 +96,13 @@ class _MyAppState extends State<MyApp> {
             style: Theme.of(context).textTheme.caption));
 
     final appBar = AppBar(
-              title: Text('Flutter Todo App'),
-              actions: [
-                IconButton(
-                    tooltip: 'Delete finished todos',
-                    icon: Icon(Icons.cleaning_services_outlined),
-                    onPressed: _finishedCount > 0 ? _deleteFinishedTodos : null)
-              ],
+      title: Text('Flutter Todo App'),
+      actions: [
+        IconButton(
+            tooltip: 'Delete finished todos',
+            icon: Icon(Icons.cleaning_services_outlined),
+            onPressed: _finishedCount > 0 ? _deleteFinishedTodos : null)
+      ],
     );
 
     final darkTheme = ThemeData(
@@ -121,13 +121,13 @@ class _MyAppState extends State<MyApp> {
             appBar: appBar,
             body: ListWrapper(
                 child: ListView(children: [
-                          for (int i = 0; i < _todos.length; i++)
-                            TodoItem(
-                              todo: _todos[i],
-                              onToggle: () => _toggleTodo(i),
-                              onDelete: () => _deleteTodo(i),
-                            ),
-                          TodoForm(onSubmit: _addTodo),
+              for (int i = 0; i < _todos.length; i++)
+                TodoItem(
+                  todo: _todos[i],
+                  onToggle: () => _toggleTodo(i),
+                  onDelete: () => _deleteTodo(i),
+                ),
+              TodoForm(onSubmit: _addTodo),
               counter
             ]))));
   }
