@@ -20,6 +20,7 @@ class TodoItem extends StatelessWidget {
       key: Key(todo.id),
       direction: DismissDirection.horizontal,
       onDismissed: (_) => onDelete(),
+      background: Container(color: Colors.red.shade600),
       child: CheckboxListTile(
           controlAffinity: ListTileControlAffinity.leading,
           activeColor: Theme.of(context).accentColor,
