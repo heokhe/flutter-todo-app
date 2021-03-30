@@ -8,11 +8,9 @@ class TodoForm extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
     return ListTile(
-      leading: Padding(
-          padding: EdgeInsets.only(left: 4),
-          child: Icon(Icons.add_circle_outline)),
+      leading: SizedBox(
+          width: 40, child: Center(child: Icon(Icons.add_circle_outline))),
       title: TextField(
-        autofocus: true,
         controller: controller,
         keyboardAppearance: Theme.of(context).brightness,
         onSubmitted: (text) {
