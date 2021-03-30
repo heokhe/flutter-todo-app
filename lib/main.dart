@@ -31,6 +31,28 @@ class TodoItem extends StatelessWidget {
   }
 }
 
+class ListWrapper extends StatelessWidget {
+  final Widget child;
+
+  ListWrapper({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    if (MediaQuery.of(context).size.width >= 600) {
+      return Center(
+          child: Container(
+              constraints: BoxConstraints(maxWidth: 600 - 2 * 24),
+              child: Card(
+                  margin: EdgeInsets.zero,
+                  clipBehavior: Clip.hardEdge,
+                  shape: RoundedRectangleBorder(),
+                  child: child)));
+    } else {
+      return child;
+    }
+  }
+}
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -42,12 +64,9 @@ class _MyAppState extends State<MyApp> {
 
   void _toggleTodo(int index) {
     setState(() {
-      _todos[index].toggle();
-      if (_todos[index].isFinished) {
-        _finishedCount++;
-      } else {
-        _finishedCount--;
-      }
+      final todo = _todos[index];
+      todo.toggle();
+      _finishedCount += todo.isFinished ? 1 : -1;
     });
   }
 
@@ -69,17 +88,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Todo App',
-        color: Colors.deepPurple,
-        theme: ThemeData(
-            primarySwatch: Colors.deepPurple, accentColor: Colors.teal),
-        darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            primarySwatch: Colors.deepPurple,
-            accentColor: Colors.tealAccent),
-        home: Scaffold(
-            appBar: AppBar(
+    final counter = Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+            '$_finishedCount finished, ${_todos.length - _finishedCount} remaining',
+            style: Theme.of(context).textTheme.caption));
+
+    final appBar = AppBar(
               title: Text('Flutter Todo App'),
               actions: [
                 IconButton(
@@ -87,15 +102,24 @@ class _MyAppState extends State<MyApp> {
                     icon: Icon(Icons.cleaning_services_outlined),
                     onPressed: _finishedCount > 0 ? _deleteFinishedTodos : null)
               ],
-            ),
-            body: Center(
-                child: Container(
-                    constraints: BoxConstraints(maxWidth: 560),
-                    child: Card(
-                        margin: EdgeInsets.zero,
-                        clipBehavior: Clip.hardEdge,
-                        shape: RoundedRectangleBorder(),
-                        child: ListView(primary: true, children: [
+    );
+
+    final darkTheme = ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.purple,
+        accentColor: Colors.tealAccent);
+    final lightTheme =
+        ThemeData(primarySwatch: Colors.deepPurple, accentColor: Colors.teal);
+
+    return MaterialApp(
+        title: 'Flutter Todo App',
+        color: Colors.deepPurple,
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        home: Scaffold(
+            appBar: appBar,
+            body: ListWrapper(
+                child: ListView(children: [
                           for (int i = 0; i < _todos.length; i++)
                             TodoItem(
                               todo: _todos[i],
@@ -103,11 +127,7 @@ class _MyAppState extends State<MyApp> {
                               onDelete: () => _deleteTodo(i),
                             ),
                           TodoForm(onSubmit: _addTodo),
-                          Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Text(
-                                  '$_finishedCount finished, ${_todos.length - _finishedCount} remaining',
-                                  style: Theme.of(context).textTheme.caption))
-                        ]))))));
+              counter
+            ]))));
   }
 }
