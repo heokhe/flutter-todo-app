@@ -113,22 +113,24 @@ class MyPage extends StatelessWidget {
   }
 }
 
+final darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primarySwatch: Colors.purple,
+    accentColor: Colors.tealAccent);
+final lightTheme =
+    ThemeData(primarySwatch: Colors.deepPurple, accentColor: Colors.teal);
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final darkTheme = ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.purple,
-        accentColor: Colors.tealAccent);
-    final lightTheme =
-        ThemeData(primarySwatch: Colors.deepPurple, accentColor: Colors.teal);
-
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Todo App',
-        color: Colors.deepPurple,
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        home: MyPage());
+    return ChangeNotifierProvider(
+        create: (_) => Model(),
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Todo App',
+            color: Colors.deepPurple,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            home: MyPage()));
   }
 }
