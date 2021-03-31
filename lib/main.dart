@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/todo.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/model.dart';
 import 'package:todo_app/form.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (_) => Model(),
+    child: MyApp(),
+  ));
 }
 
 class TodoItem extends StatelessWidget {
@@ -21,13 +26,19 @@ class TodoItem extends StatelessWidget {
       direction: DismissDirection.horizontal,
       onDismissed: (_) => onDelete(),
       background: Container(color: Colors.red.shade600),
-      child: CheckboxListTile(
-          controlAffinity: ListTileControlAffinity.leading,
-          activeColor: Theme.of(context).accentColor,
-          checkColor: Theme.of(context).accentIconTheme.color,
-          value: todo.isFinished,
-          title: Text(todo.title),
-          onChanged: (bool? _) => onToggle()),
+      child: ListTile(
+        contentPadding: EdgeInsets.only(left: 8),
+        onTap: () => onToggle(),
+        leading: AbsorbPointer(
+            child: SizedBox(
+                width: 48,
+                child: Checkbox(
+                    activeColor: Theme.of(context).accentColor,
+                    checkColor: Theme.of(context).accentIconTheme.color,
+                    value: todo.isFinished,
+                    onChanged: (bool? _) => {}))),
+        title: Text(todo.title),
+      ),
     );
   }
 }
@@ -54,57 +65,57 @@ class ListWrapper extends StatelessWidget {
   }
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  List<Todo> _todos = [];
-  int _finishedCount = 0;
-
-  void _toggleTodo(int index) {
-    setState(() {
-      final todo = _todos[index];
-      todo.toggle();
-      _finishedCount += todo.isFinished ? 1 : -1;
-    });
-  }
-
-  void _addTodo(String title) => setState(() => _todos.add(Todo(title)));
-
-  void _deleteTodo(int index) {
-    setState(() {
-      if (_todos[index].isFinished) _finishedCount--;
-      _todos.removeAt(index);
-    });
-  }
-
-  void _deleteFinishedTodos() {
-    setState(() {
-      _todos.retainWhere((todo) => !todo.isFinished);
-      _finishedCount = 0;
-    });
-  }
-
+class TodoCounter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final counter = Padding(
+    final model = context.read<Model>();
+    final finishedCount = model.finishedCount;
+    final remainingCount = model.remainingCount;
+    return Padding(
         padding: EdgeInsets.all(16),
-        child: Text(
-            '$_finishedCount finished, ${_todos.length - _finishedCount} remaining',
+        child: Text('$finishedCount finished, $remainingCount remaining',
             style: Theme.of(context).textTheme.caption));
+  }
+}
 
-    final appBar = AppBar(
-      title: Text('Flutter Todo App'),
-      actions: [
-        IconButton(
-            tooltip: 'Delete finished todos',
-            icon: Icon(Icons.cleaning_services_outlined),
-            onPressed: _finishedCount > 0 ? _deleteFinishedTodos : null)
-      ],
-    );
+class ClearButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final model = context.read<Model>();
+    final finishedCount = model.finishedCount;
+    final deleteFinishedTodos = model.deleteFinishedTodos;
+    return IconButton(
+        tooltip: 'Delete finished todos',
+        icon: Icon(Icons.cleaning_services_outlined),
+        onPressed: finishedCount > 0 ? deleteFinishedTodos : null);
+  }
+}
 
+class MyPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final model = context.watch<Model>();
+    final todos = model.todos;
+    return Scaffold(
+        appBar:
+            AppBar(title: Text('Flutter Todo App'), actions: [ClearButton()]),
+        body: ListWrapper(
+            child: ListView(children: [
+          for (var i = 0; i < todos.length; i++)
+            TodoItem(
+              todo: todos[i],
+              onToggle: () => model.toggleTodo(i),
+              onDelete: () => model.deleteTodo(i),
+            ),
+          TodoForm(),
+          TodoCounter(),
+        ])));
+  }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     final darkTheme = ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.purple,
@@ -113,22 +124,11 @@ class _MyAppState extends State<MyApp> {
         ThemeData(primarySwatch: Colors.deepPurple, accentColor: Colors.teal);
 
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Todo App',
         color: Colors.deepPurple,
         theme: lightTheme,
         darkTheme: darkTheme,
-        home: Scaffold(
-            appBar: appBar,
-            body: ListWrapper(
-                child: ListView(children: [
-              for (int i = 0; i < _todos.length; i++)
-                TodoItem(
-                  todo: _todos[i],
-                  onToggle: () => _toggleTodo(i),
-                  onDelete: () => _deleteTodo(i),
-                ),
-              TodoForm(onSubmit: _addTodo),
-              counter
-            ]))));
+        home: MyPage());
   }
 }

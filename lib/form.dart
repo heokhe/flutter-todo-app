@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/model.dart';
 
 class TodoForm extends StatelessWidget {
-  final void Function(String title) onSubmit;
-  TodoForm({required this.onSubmit});
-
   @override
   Widget build(BuildContext context) {
+    final addTodo = context.read<Model>().addTodo;
     TextEditingController controller = TextEditingController();
     return ListTile(
+      contentPadding: EdgeInsets.only(left: 8),
       leading: SizedBox(
-          width: 40, child: Center(child: Icon(Icons.add_circle_outline))),
+          width: 48, child: Center(child: Icon(Icons.add_circle_outline))),
       title: TextField(
         controller: controller,
         keyboardAppearance: Theme.of(context).brightness,
         onSubmitted: (text) {
           if (text.length > 0) {
-            onSubmit(text);
+            addTodo(text);
             controller.clear();
           }
         },
