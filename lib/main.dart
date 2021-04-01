@@ -5,10 +5,7 @@ import 'package:todo_app/model.dart';
 import 'package:todo_app/form.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (_) => Model(),
-    child: MyApp(),
-  ));
+  runApp(MyApp());
 }
 
 class TodoItem extends StatelessWidget {
