@@ -24,7 +24,7 @@ class TodoItem extends StatelessWidget {
       onDismissed: (_) => onDelete(),
       background: Container(color: Colors.red.shade600),
       child: ListTile(
-        contentPadding: EdgeInsets.only(left: 8),
+        contentPadding: EdgeInsets.symmetric(horizontal: 8),
         onTap: () => onToggle(),
         leading: AbsorbPointer(
             child: SizedBox(

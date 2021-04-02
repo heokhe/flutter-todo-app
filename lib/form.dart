@@ -8,7 +8,7 @@ class TodoForm extends StatelessWidget {
     final addTodo = context.read<Model>().addTodo;
     TextEditingController controller = TextEditingController();
     return ListTile(
-      contentPadding: EdgeInsets.only(left: 8),
+      contentPadding: EdgeInsets.symmetric(horizontal: 8),
       leading: SizedBox(
           width: 48, child: Center(child: Icon(Icons.add_circle_outline))),
       title: TextField(
