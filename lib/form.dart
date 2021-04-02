@@ -8,6 +8,7 @@ class TodoForm extends StatelessWidget {
     final addTodo = context.read<Model>().addTodo;
     TextEditingController controller = TextEditingController();
     return ListTile(
+      minVerticalPadding: 0,
       contentPadding: EdgeInsets.symmetric(horizontal: 8),
       leading: SizedBox(
           width: 48, child: Center(child: Icon(Icons.add_circle_outline))),
@@ -20,7 +21,7 @@ class TodoForm extends StatelessWidget {
             controller.clear();
           }
         },
-        decoration: InputDecoration.collapsed(
+        decoration: InputDecoration(
             hintText: 'Add a new todo, e.g. go shopping...',
             border: InputBorder.none),
       ),
